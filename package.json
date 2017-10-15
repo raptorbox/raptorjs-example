@@ -1,0 +1,26 @@
+{
+  "name": "raptorjs-example",
+  "version": "1.0.0",
+  "description": "Example code for the Raptor Javascript SDK",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/raptorbox/raptorjs-example.git"
+  },
+  "author": "",
+  "license": "Apache 2",
+  "bugs": {
+    "url": "https://github.com/raptorbox/raptorjs-example/issues"
+  },
+  "homepage": "https://github.com/raptorbox/raptorjs-example#readme",
+  "dependencies": {
+    "raptor-sdk": "^4.3.25",
+    "winston": "^2.4.0"
+  },
+  "devDependencies": {
+    "eslint": "^4.8.0"
+  }
+}
