@@ -14,11 +14,24 @@ const pullData = (device, streamName) => {
 }
 
 const printData = (records) => {
+
+    let headerOk = false
+    const printHeader = (record) => {
+        return 'date\t' + Object.keys(record.channels).join('\t')
+    }
+
     records.forEach((record) => {
+
+        if(!headerOk) {
+            console.log(printHeader(record))
+            headerOk = true
+        }
+
         const chans = Object.keys(record.channels).map((c) => {
-            return c + '=' + record.channels[c]
-        }).join(' ')
-        log.info('%s\t%s', (new Date(record.timestamp*1000)).toString(), chans)
+            return record.channels[c]
+        }).join('\t')
+
+        console.log('%s\t%s', (new Date(record.timestamp*1000)).toString(), chans)
     })
 }
 
@@ -53,7 +66,7 @@ const main = () => {
             return printData(records)
         })
         .then(() => {
-            log.info('Closing')
+            log.debug('Closing')
             process.exit(0)
         })
         .catch((e) => {
