@@ -47,24 +47,46 @@ const loadDevice = (code) => {
 }
 
 const subscribe = (device) => {
-    return raptor.Inventory()
-        .subscribe(device, (data) => {
+    return raptor.Stream()
+        .subscribe(device.getStream('ambient'), (data) => {
             log.info('Data received: %j', data)
         })
-        .then(() => Promise.resolve(device))
+        .then(()=> Promise.resolve(device))
 }
 
-const pushData = (device) => {
-    const record = device.getStream('ambient').createRecord({
-        temperature: Math.floor(Math.random()*10),
-        light: Math.floor(Math.random()*100)
+const pushData = (device, maxCounter) => {
+    maxCounter = !maxCounter || maxCounter <= 0 ? 10 : maxCounter
+    return new Promise(function(resolve, reject) {
+        let counter = maxCounter
+        const intv = setInterval(function() {
+            const record = device.getStream('ambient').createRecord({
+                temperature: Math.floor(Math.random()*10),
+                light: Math.floor(Math.random()*100)
+            })
+            log.debug('Sending data %d/%d', (maxCounter-counter)+1, maxCounter)
+            raptor.Stream().push(record)
+                .then(() => {
+                    counter--
+                    if (counter === 0) {
+                        clearInterval(intv)
+                        log.info('Send data completed')
+                        resolve(device)
+                    }
+                })
+                .catch((e) => {
+                    clearInterval(intv)
+                    log.warn('Send data failed: %s', e.message)
+                    reject(e)
+                })
+        }, 1500)
     })
-    return raptor.Stream().push(record)
 }
 
 const main = () => {
 
-    log.level = config.logLevel
+    if (config.logLevel) {
+        log.level = config.logLevel
+    }
 
     raptor.Auth().login()
         .then((user) => {
@@ -77,12 +99,19 @@ const main = () => {
         })
         .then((device) => {
             log.debug('Pushing data to device `%s`', device.id)
-            return pushData(device)
+            return pushData(device, 2)
+        })
+        .then((device) => {
+            log.debug('Unsubscribing device `%s`', device.id)
+            return raptor.Inventory().unsubscribe(device)
+        })
+        .then(() => {
+            log.info('Closing')
+            process.exit(0)
         })
         .catch((e) => {
             log.error('Error: %s', e.message)
         })
 }
-
 
 main()
