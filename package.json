@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/raptorbox/raptorjs-example#readme",
   "dependencies": {
-    "raptor-sdk": "^4.3.26",
+    "raptor-sdk": "^4.3.27",
     "winston": "^2.4.0"
   },
   "devDependencies": {
