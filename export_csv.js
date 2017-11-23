@@ -44,7 +44,7 @@ const printData = (records) => {
         if(i === 0) {
             data.push(getHeader(record).join('\t'))
         }
-        const a = [(new Date(record.timestamp*1000)).toString()]
+        const a = [ record.timestamp ]
         a.push(...Object.keys(record.channels).map((c) => record.channels[c]))
         data.push(a.join('\t'))
     })
