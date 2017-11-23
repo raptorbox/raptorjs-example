@@ -5,6 +5,5 @@
         "username": "admin",
         "password": "admin"
     },
-    
     "logLevel": "debug"
 }
