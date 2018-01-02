@@ -19,7 +19,7 @@
   "dependencies": {
     "bluebird": "^3.5.1",
     "csv": "^1.1.1",
-    "raptor-sdk": "^4.3.29",
+    "raptor-sdk": "^4.3.41",
     "winston": "^2.4.0"
   },
   "devDependencies": {

@@ -34,7 +34,7 @@ const pullData = (device, streamName, limit = 0, size = 1000, page = 0) => {
 const printData = (records) => {
 
     const getHeader = (record) => {
-        const a = ['date']
+        const a = ['date', 'timestamp']
         a.push(...Object.keys(record.channels))
         return a
     }
@@ -44,7 +44,7 @@ const printData = (records) => {
         if(i === 0) {
             data.push(getHeader(record).join('\t'))
         }
-        const a = [ record.timestamp ]
+        const a = [ (new Date(record.timestamp*1000)).toString(), record.timestamp ]
         a.push(...Object.keys(record.channels).map((c) => record.channels[c]))
         data.push(a.join('\t'))
     })
